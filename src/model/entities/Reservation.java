@@ -37,15 +37,24 @@ public class Reservation {
 	}
 
 	public long duration() {
-		//diferença entre duas datas pelo total de millisegundos
+		// diferença entre duas datas pelo total de millisegundos
 		long diff = checkOut.getTime() - checkIn.getTime();
-		//converter milisegundos para dias
-		 return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+		// converter milisegundos para dias
+		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 	}
 
-	public void updateDates(Date checkIn, Date checkOut) {
+	public String updateDates(Date checkIn, Date checkOut) {
+		Date now = new Date();
+		if (checkIn.before(now) || checkOut.before(now)) {
+			return "Error in reservation: Reservation dates for update must be future dates";
+		}
+
+		if (!checkOut.after(checkIn)) {
+			return "Error in reservation: Check-out date must be after check-in date";
+		}
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+		return null;
 	}
 
 	@Override
@@ -63,3 +72,4 @@ public class Reservation {
 	}
 
 }
+
